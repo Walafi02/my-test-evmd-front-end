@@ -8,13 +8,13 @@ const UserCard = ({
   name, email, age, picture, onPress,
 }) => (
   <TouchableOpacity style={styles.container} onPress={onPress}>
-    <View>
+    <View style={styles.viewImage}>
       <Image
         source={{ uri: picture }}
         style={styles.image}
       />
     </View>
-    <View>
+    <View style={styles.viewText}>
       <Text>{`${name}, ${age}`}</Text>
       <Text>{email}</Text>
     </View>
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#e5e5e5',
     padding: 15,
+    marginBottom: 15,
     borderRadius: 5,
     width: '100%',
     borderColor: '#e9e9e9',
@@ -44,6 +45,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: 50,
     height: 50,
+  },
+  viewImage: {
+    flex: 1,
+    marginRight: 15,
+  },
+  viewText: {
+    flex: 4,
   },
 });
 
