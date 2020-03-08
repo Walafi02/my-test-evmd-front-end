@@ -24,7 +24,7 @@ const UserCard = ({
 UserCard.propTypes = {
   name: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
-  age: PropTypes.string.isRequired,
+  age: PropTypes.number.isRequired,
   picture: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
 };

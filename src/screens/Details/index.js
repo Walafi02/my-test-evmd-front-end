@@ -1,37 +1,83 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   View, Image, StyleSheet, Text, TouchableOpacity,
 } from 'react-native';
+import * as SQLite from 'expo-sqlite';
+import Constants from 'expo-constants';
 
-const Details = () => (
-  <View style={styles.container}>
-    <View>
-      <Image
-        source={{
-          uri: 'http://placehold.it/1024x1024',
-        }}
-        style={styles.image}
-      />
+const { DB_NAME } = Constants.manifest.extra.env;
+const db = SQLite.openDatabase(DB_NAME);
+
+const Details = () => {
+  const user = useSelector((state) => state.user.data);
+
+  const dispatch = useDispatch();
+
+  const handlePress = () => {
+    const { _id, favorite } = user;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(`update users set favorite = ? where _id = ?;`, [favorite === 0 ? 1 : 0, _id]);
+        tx.executeSql(`SELECT * FROM users where _id = ?`, [_id], (_, { rows: { _array } }) => {
+          dispatch({
+            type: '@user/SAVE_USER',
+            user: _array[0],
+          });
+        });
+      },
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <View>
+        <Image
+          source={{
+            uri: `${user.picture}`,
+          }}
+          style={styles.image}
+        />
+      </View>
+      <View
+        style={styles.detailsContainer}
+      >
+        <Text>
+          Nome:
+          {user.name}
+        </Text>
+        <Text>
+          E-mail:
+          {user.email}
+        </Text>
+        <Text>
+          Idade:
+          {user.age}
+        </Text>
+        <Text>
+          Salário:
+          {user.balance}
+        </Text>
+        <Text>
+          Latitude:
+          {user.latitude}
+        </Text>
+        <Text>
+          Longitude:
+          {user.longitude}
+        </Text>
+      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handlePress}
+      >
+        <Text>
+          {user.favorite === 1 ? 'Desavoritar' : 'Favoritar'}
+        </Text>
+      </TouchableOpacity>
     </View>
-    <View
-      style={styles.detailsContainer}
-    >
-      <Text>Nome: Ighor</Text>
-      <Text>E-mail: email@email.com</Text>
-      <Text>Idade: 23</Text>
-      <Text>Salário: 1,767.09</Text>
-      <Text>Latitude: 66.701576</Text>
-      <Text>Longitude: 178.865541</Text>
-    </View>
-    <TouchableOpacity
-      style={styles.button}
-    >
-      <Text>
-        Favorito
-      </Text>
-    </TouchableOpacity>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import {
   View, StyleSheet, FlatList,
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as SQLite from 'expo-sqlite';
-
 import Constants from 'expo-constants';
 
 import { UserCard } from '../../components';
 
 const { DB_NAME } = Constants.manifest.extra.env;
-
 const db = SQLite.openDatabase(DB_NAME);
 
 const Home = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.data);
+
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -37,14 +39,21 @@ const Home = ({ navigation }) => {
     load(0, []);
   };
 
-  const handlePress = (user) => {
-    console.log("user", user);
-    navigation.navigate('Details');
+  const handlePress = (userCurrent) => {
+    dispatch({
+      type: '@user/SAVE_USER',
+      user: userCurrent,
+    });
+    navigation.push('Details');
   };
 
   useEffect(() => {
     load(0, []);
   }, []);
+
+  useEffect(() => {
+    setUsers(users.map((x) => ((x._id === user._id) ? user : x)));
+  }, [user]);
 
   return (
     <View
