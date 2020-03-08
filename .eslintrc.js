@@ -23,6 +23,7 @@ module.exports = {
   rules: {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-use-before-define": ["error", { "variables": false }],
-    "quotes": "off"
+    "quotes": "off",
+    "no-underscore-dangle": "off"
   },
 };
