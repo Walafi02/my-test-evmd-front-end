@@ -4,8 +4,10 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
+import { Ionicons } from '@expo/vector-icons';
+
 const UserCard = ({
-  name, email, age, picture, onPress,
+  name, email, age, picture, favorite, onPress,
 }) => (
   <TouchableOpacity style={styles.container} onPress={onPress}>
     <View style={styles.viewImage}>
@@ -18,6 +20,9 @@ const UserCard = ({
       <Text>{`${name}, ${age}`}</Text>
       <Text>{email}</Text>
     </View>
+    <View>
+      <Ionicons name="md-star" size={32} color={`${favorite === 1 ? '#FFDF3B' : '#cccccc'}`} />
+    </View>
   </TouchableOpacity>
 );
 
@@ -26,6 +31,7 @@ UserCard.propTypes = {
   email: PropTypes.string.isRequired,
   age: PropTypes.number.isRequired,
   picture: PropTypes.string.isRequired,
+  favorite: PropTypes.number.isRequired,
   onPress: PropTypes.func.isRequired,
 };
 

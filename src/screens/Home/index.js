@@ -69,6 +69,7 @@ const Home = ({ navigation }) => {
             age={item.age}
             email={item.email}
             picture={item.picture}
+            favorite={item.favorite}
             onPress={() => handlePress(item)}
           />
         )}
